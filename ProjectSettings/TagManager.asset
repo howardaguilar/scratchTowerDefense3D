@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - EasyEnemy
+  - TowerPosition
+  - DefenseTower
+  - HardEnemy
   layers:
   - Default
   - TransparentFX

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 public class Purse : MonoBehaviour
@@ -25,5 +26,30 @@ public class Purse : MonoBehaviour
     {
         score = score + 50;
         points.text = score.ToString();
+    }
+
+    public void AddCash(int amountOfCash)
+    {
+        score += amountOfCash;
+        points.text = score.ToString();
+    }
+
+    public void SetCash()
+    {
+        points.text = score.ToString();
+    }
+
+    public bool PlaceTower (int AmountOfCashRequired)
+    {
+        if (score - AmountOfCashRequired >= 0)
+        {
+            score -= AmountOfCashRequired;
+            SetCash(); //Update GUI
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

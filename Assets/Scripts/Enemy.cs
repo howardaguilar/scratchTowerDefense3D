@@ -13,17 +13,23 @@ public class Enemy : MonoBehaviour
     private bool move = true;
     private Rigidbody rb;
     // Health
-    private int health = 100;
+    private int startingHealth;
+    public int health = 100;
+    public HealthBar healthBar;
     // Purse
     public Purse message;
     // Start is called before the first frame update
+
+    //Teacher stuff
+    public int cashPoints = 0;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-
+        healthBar = GetComponentInChildren<HealthBar>();
+        startingHealth = health;
         // Place our enemy at the start point
         //transform.position = navPoints[index].transform.position; //Makes enemies spawn at starting waypoint
-        message = GameObject.Find("Purse").GetComponent<Purse>();
+        message = GameObject.Find("Purse").GetComponent<Purse>(); //Teacher found with tag
         NextWayPoint();
         
         //target = navPoints[index].transform;
@@ -37,7 +43,8 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && gameObject.tag == "EasyEnemy")
+        /*
+        if (Input.GetMouseButtonDown(0) && gameObject.tag == "EasyEnemy") // Always true because in Enemy Script, move elsewhere
         {
             Debug.Log(gameObject.tag);
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -46,14 +53,14 @@ public class Enemy : MonoBehaviour
             {
                 Debug.Log("EasyEnemy was clicked!");
                 health = health - 25;
-                Debug.Log(health);
+                Debug.Log(health);o
                 if (health <= 0)
                 {
                     message.updateScore();
                     Destroy(gameObject); // Need to figure out how to destroy just one enemy, they all have same health variable? Issue could be since it's a mouse click?
                 }
             }
-        }
+        } */
         if (move)
         {
             transform.Translate(direction.normalized * Time.deltaTime * amplify); // Normalize since it may act different with vectors for far away nodes
@@ -91,6 +98,20 @@ public class Enemy : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         // Maybe use for bullet collisions
+    }
+
+    public void TakeDamage(int amount)
+    {
+        health -= amount;
+        if (health <= 0)
+        {
+            message.AddCash(amount);
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            healthBar.Damage(health, startingHealth);
+        }
     }
 
 }
